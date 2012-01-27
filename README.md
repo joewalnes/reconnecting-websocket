@@ -13,3 +13,4 @@ you can replace with:
 
     ws = new ReconnectingWebSocket('ws://....');
 
+Minified library with gzip compression is less than 600 bytes.

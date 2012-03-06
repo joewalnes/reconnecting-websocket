@@ -44,7 +44,7 @@
  *
  * - Joe Walnes
  */
-function ReconnectingWebSocket(url) {
+function ReconnectingWebSocket(url, protocols) {
 
     // These can be altered by calling code.
     this.debug = false;
@@ -57,6 +57,7 @@ function ReconnectingWebSocket(url) {
     var timedOut = false;
     
     this.url = url;
+    this.protocols = protocols;
     this.readyState = WebSocket.CONNECTING;
     this.URL = url; // Public API
 
@@ -73,7 +74,7 @@ function ReconnectingWebSocket(url) {
     };
 
     function connect(reconnectAttempt) {
-        ws = new WebSocket(url);
+        ws = new WebSocket(url, protocols);
         if (self.debug || ReconnectingWebSocket.debugAll) {
             console.debug('ReconnectingWebSocket', 'attempt-connect', url);
         }

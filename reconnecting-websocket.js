@@ -42,6 +42,7 @@
  *
  * It is API compatible with the standard WebSocket API.
  *
+ * Latest version: https://github.com/joewalnes/reconnecting-websocket/
  * - Joe Walnes
  */
 function ReconnectingWebSocket(url, protocols) {

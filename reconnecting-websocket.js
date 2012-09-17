@@ -31,10 +31,12 @@
  *   ws = new ReconnectingWebSocket('ws://....');
  *
  * The event stream will typically look like:
+ *  onconnecting
  *  onopen
  *  onmessage
  *  onmessage
  *  onclose // lost connection
+ *  onconnecting
  *  onopen  // sometime later...
  *  onmessage
  *  onmessage
@@ -79,6 +81,7 @@ function ReconnectingWebSocket(url, protocols) {
 
     function connect(reconnectAttempt) {
         ws = new WebSocket(url, protocols);
+        
         self.onconnecting();
         if (self.debug || ReconnectingWebSocket.debugAll) {
             console.debug('ReconnectingWebSocket', 'attempt-connect', url);

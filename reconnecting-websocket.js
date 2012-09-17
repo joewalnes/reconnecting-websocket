@@ -68,6 +68,9 @@ function ReconnectingWebSocket(url, protocols) {
     this.onclose = function(event) {
     };
 
+    this.onconnecting = function(event) {
+    };
+
     this.onmessage = function(event) {
     };
 
@@ -108,6 +111,7 @@ function ReconnectingWebSocket(url, protocols) {
                 self.onclose(event);
             } else {
                 self.readyState = WebSocket.CONNECTING;
+                self.onconnecting();
                 if (!reconnectAttempt && !timedOut) {
                     if (self.debug || ReconnectingWebSocket.debugAll) {
                         console.debug('ReconnectingWebSocket', 'onclose', url);

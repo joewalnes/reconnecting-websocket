@@ -46,6 +46,7 @@
  * - Joe Walnes
  */
 function ReconnectingWebSocket(url, protocols) {
+    protocols = protocols || [];
 
     // These can be altered by calling code.
     this.debug = false;

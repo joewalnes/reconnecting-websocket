@@ -14,3 +14,7 @@ you can replace with:
     ws = new ReconnectingWebSocket('ws://....');
 
 Minified library with gzip compression is less than 600 bytes.
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/joewalnes/reconnecting-websocket/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+

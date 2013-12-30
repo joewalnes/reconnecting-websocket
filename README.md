@@ -15,6 +15,12 @@ you can replace with:
 
 Minified library with gzip compression is less than 600 bytes.
 
+More
+----
+
+Like this? Check out [websocketd](https://github.com/joewalnes/websocketd) for the simplest way to create WebSocket backends from any programming language.
+
+[Follow @joewalnes](https://twitter.com/joewalnes)
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/joewalnes/reconnecting-websocket/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 

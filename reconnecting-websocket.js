@@ -141,7 +141,7 @@ function ReconnectingWebSocket(url, protocols) {
             self.onerror(event);
         };
     }
-    connect(url);
+    connect(false);
 
     this.send = function(data) {
         if (ws) {

@@ -155,8 +155,8 @@ function ReconnectingWebSocket(url, protocols) {
     };
 
     this.close = function() {
+        forcedClose = true;
         if (ws) {
-            forcedClose = true;
             ws.close();
         }
     };

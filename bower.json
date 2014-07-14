@@ -7,6 +7,9 @@
     "Joe Walnes",
     "headlessme <contact@coggle.it>"
   ],
+  "main": [
+    "reconnecting-websocket.js"
+  ],
   "description": "A small decorator for the JavaScript WebSocket API that automatically reconnects",
   "moduleType": [
     "amd",

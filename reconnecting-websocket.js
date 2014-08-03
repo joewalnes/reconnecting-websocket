@@ -40,7 +40,7 @@
  *  onopen  // sometime later...
  *  onmessage
  *  onmessage
- *  etc... 
+ *  etc...
  *
  * It is API compatible with the standard WebSocket API.
  *
@@ -71,7 +71,7 @@
         var ws;
         var forcedClose = false;
         var timedOut = false;
-        
+
         this.url = url;
         this.protocols = protocols;
         this.readyState = WebSocket.CONNECTING;
@@ -92,14 +92,14 @@
         this.onerror = function(event) {
         };
 
-        function connect(reconnectAttempt) {
+        this.connect = function(reconnectAttempt) {
             ws = new WebSocket(url, protocols);
-            
+
             self.onconnecting();
             if (self.debug || ReconnectingWebSocket.debugAll) {
                 console.debug('ReconnectingWebSocket', 'attempt-connect', url);
             }
-            
+
             var localWs = ws;
             var timeout = setTimeout(function() {
                 if (self.debug || ReconnectingWebSocket.debugAll) {
@@ -109,7 +109,7 @@
                 localWs.close();
                 timedOut = false;
             }, self.timeoutInterval);
-            
+
             ws.onopen = function(event) {
                 clearTimeout(timeout);
                 if (self.debug || ReconnectingWebSocket.debugAll) {
@@ -120,7 +120,7 @@
                 self.reconnectAttempts = 0;
                 self.onopen(event);
             };
-            
+
             ws.onclose = function(event) {
                 clearTimeout(timeout);
                 ws = null;
@@ -138,7 +138,7 @@
                     }
                     setTimeout(function() {
                         self.reconnectAttempts++;
-                        connect(true);
+                        self.connect(true);
                     }, self.reconnectInterval * Math.pow(self.reconnectDecay, self.reconnectAttempts));
                 }
             };
@@ -155,7 +155,7 @@
                 self.onerror(event);
             };
         }
-        connect(false);
+        this.connect(false);
 
         this.send = function(data) {
             if (ws) {

@@ -95,7 +95,9 @@
         function connect(reconnectAttempt) {
             ws = new WebSocket(url, protocols);
             
-            self.onconnecting();
+            if(!reconnectAttempt)
+                self.onconnecting();
+                
             if (self.debug || ReconnectingWebSocket.debugAll) {
                 console.debug('ReconnectingWebSocket', 'attempt-connect', url);
             }

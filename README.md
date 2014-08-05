@@ -48,6 +48,11 @@ With a `ReconnectingWebSocket`, after an `onclose` event is called it will autom
 
 This is all handled automatically for you by the library.
 
+Manually Opening, Closing and Refreshing connections
+----------------------------------------
+
+When you create a new `ReconnectingWebSocket`, the `WebSocket` connection is created and opened for you. In the case that you need to manually close a connection, simply run the `close()` method. To open the connection back up, use `open()`. If you need to close and immediately reopen the connection, use `refresh()`.
+
 More
 ----
 

@@ -92,7 +92,7 @@
         this.onerror = function(event) {
         };
 
-        this.connect = function(reconnectAttempt) {
+        this.open = function(reconnectAttempt) {
             ws = new WebSocket(url, protocols);
 
             self.onconnecting();
@@ -138,7 +138,7 @@
                     }
                     setTimeout(function() {
                         self.reconnectAttempts++;
-                        self.connect(true);
+                        self.open(true);
                     }, self.reconnectInterval * Math.pow(self.reconnectDecay, self.reconnectAttempts));
                 }
             };
@@ -155,7 +155,7 @@
                 self.onerror(event);
             };
         }
-        this.connect(false);
+        this.open(false);
 
         this.send = function(data) {
             if (ws) {

@@ -83,7 +83,7 @@
         this.onclose = function(event) {
         };
 
-        this.onconnecting = function(event) {
+        this.onconnecting = function() {
         };
 
         this.onmessage = function(event) {

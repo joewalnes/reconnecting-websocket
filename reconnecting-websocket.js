@@ -170,10 +170,10 @@
             }
         };
 
-        this.close = function() {
+        this.close = function(code, reason) {
             forcedClose = true;
             if (ws) {
-                ws.close();
+                ws.close(code, reason);
             }
         };
 

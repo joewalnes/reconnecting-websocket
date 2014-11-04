@@ -42,7 +42,14 @@
  *  onmessage
  *  etc... 
  *
- * It is API compatible with the standard WebSocket API.
+ * It is API compatible with the standard WebSocket API, apart from the following members:
+ *
+ * - `addEventListener`, `addEventListener`, `dispatchEvent`
+ *   (ReconnectingWebSocket is not an EventTarget)
+ * - `bufferedAmount`
+ * - `extensions`
+ * - `binaryType`
+ * - `protocol`
  *
  * Latest version: https://github.com/joewalnes/reconnecting-websocket/
  * - Joe Walnes

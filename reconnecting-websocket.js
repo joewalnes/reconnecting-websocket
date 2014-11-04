@@ -65,8 +65,6 @@
 })(this, function () {
 
     function ReconnectingWebSocket(url, protocols) {
-        protocols = protocols || [];
-
         // These can be altered by calling code.
         this.debug = false;
         this.reconnectInterval = 1000;
@@ -80,9 +78,7 @@
         var timedOut = false;
         
         this.url = url;
-        this.protocols = protocols;
         this.readyState = WebSocket.CONNECTING;
-        this.URL = url; // Public API
 
         this.onopen = function(event) {
         };
@@ -100,7 +96,7 @@
         };
 
         function connect(reconnectAttempt) {
-            ws = new WebSocket(url, protocols);
+            ws = new WebSocket(url, protocols || []);
             
             if(!reconnectAttempt)
                 self.onconnecting();

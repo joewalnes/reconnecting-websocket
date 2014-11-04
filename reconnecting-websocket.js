@@ -49,7 +49,6 @@
  * - `bufferedAmount`
  * - `extensions`
  * - `binaryType`
- * - `protocol`
  *
  * Latest version: https://github.com/joewalnes/reconnecting-websocket/
  * - Joe Walnes
@@ -79,6 +78,7 @@
         
         this.url = url;
         this.readyState = WebSocket.CONNECTING;
+        this.protocol = null;
 
         this.onopen = function(event) {
         };
@@ -120,6 +120,7 @@
                 if (self.debug || ReconnectingWebSocket.debugAll) {
                     console.debug('ReconnectingWebSocket', 'onopen', url);
                 }
+                self.protocol = ws.protocol;
                 self.readyState = WebSocket.OPEN;
                 reconnectAttempt = false;
                 self.reconnectAttempts = 0;

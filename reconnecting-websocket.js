@@ -76,22 +76,6 @@
         this.readyState = WebSocket.CONNECTING;
         this.protocol = null;
 
-        // Client code should replace these event handlers
-        this.onopen = function(event) {
-        };
-
-        this.onclose = function(event) {
-        };
-
-        this.onconnecting = function() {
-        };
-
-        this.onmessage = function(event) {
-        };
-
-        this.onerror = function(event) {
-        };
-
         // Private state variables
         var self = this;
         var ws;
@@ -194,6 +178,12 @@
             }
         };
     }
+
+    ReconnectingWebSocket.prototype.onopen = function(event) {};
+    ReconnectingWebSocket.prototype.onclose = function(event) {};
+    ReconnectingWebSocket.prototype.onconnecting = function() {};
+    ReconnectingWebSocket.prototype.onmessage = function(event) {};
+    ReconnectingWebSocket.prototype.onerror = function(event) {};
 
     /**
      * Setting this to true is the equivalent of setting all instances of ReconnectingWebSocket.debug to true.

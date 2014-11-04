@@ -71,15 +71,12 @@
         this.reconnectAttempts = 0;
         this.timeoutInterval = 2000;
 
-        var self = this;
-        var ws;
-        var forcedClose = false;
-        var timedOut = false;
-        
+        // These should be treated as read-only properties
         this.url = url;
         this.readyState = WebSocket.CONNECTING;
         this.protocol = null;
 
+        // Client code should replace these event handlers
         this.onopen = function(event) {
         };
 
@@ -94,6 +91,12 @@
 
         this.onerror = function(event) {
         };
+
+        // Private state variables
+        var self = this;
+        var ws;
+        var forcedClose = false;
+        var timedOut = false;
 
         function connect(reconnectAttempt) {
             ws = new WebSocket(url, protocols || []);

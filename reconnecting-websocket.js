@@ -118,7 +118,14 @@
             ws = new WebSocket(url, protocols || []);
 
             if (!reconnectAttempt) {
-                eventTarget.dispatchEvent(new Event('connecting'));
+            	try {            		
+            		eventTarget.dispatchEvent(new Event('connecting'));
+            	} catch(e) {
+            		// internet explorer has a problem with that
+            		if (self.debug || ReconnectingWebSocket.debugAll) {
+                        console.debug('ReconnectingWebSocket', 'event-dispatching-error', e);
+                    }	
+            	}
             }
 
             if (self.debug || ReconnectingWebSocket.debugAll) {
@@ -146,7 +153,14 @@
                 var e = new Event('open');
                 e.isReconnect = reconnectAttempt;
                 reconnectAttempt = false;
-                eventTarget.dispatchEvent(e);
+                try {
+                	eventTarget.dispatchEvent(e);
+                } catch(e) {
+            		// internet explorer has a problem with that
+            		if (self.debug || ReconnectingWebSocket.debugAll) {
+                        console.debug('ReconnectingWebSocket', 'event-dispatching-error', e);
+                    }	
+            	}
             };
             
             ws.onclose = function(event) {
@@ -155,15 +169,36 @@
                 if (forcedClose) {
                     self.readyState = WebSocket.CLOSED;
                     self.onclose(event);
-                    eventTarget.dispatchEvent(new Event('close'));
+                    try {
+                    	eventTarget.dispatchEvent(new Event('close'));
+                    } catch(e) {
+                		// internet explorer has a problem with that
+                		if (self.debug || ReconnectingWebSocket.debugAll) {
+                            console.debug('ReconnectingWebSocket', 'event-dispatching-error', e);
+                        }	
+                	}
                 } else {
                     self.readyState = WebSocket.CONNECTING;
-                    eventTarget.dispatchEvent(new Event('connecting'));
+                    try {
+                    	eventTarget.dispatchEvent(new Event('connecting'));
+                    } catch(e) {
+                		// internet explorer has a problem with that
+                		if (self.debug || ReconnectingWebSocket.debugAll) {
+                            console.debug('ReconnectingWebSocket', 'event-dispatching-error', e);
+                        }	
+                	}
                     if (!reconnectAttempt && !timedOut) {
                         if (self.debug || ReconnectingWebSocket.debugAll) {
                             console.debug('ReconnectingWebSocket', 'onclose', url);
                         }
-                        eventTarget.dispatchEvent(new Event('close'));
+                        try {
+                        	eventTarget.dispatchEvent(new Event('close'));
+                        } catch(e) {
+                    		// internet explorer has a problem with that
+                    		if (self.debug || ReconnectingWebSocket.debugAll) {
+                                console.debug('ReconnectingWebSocket', 'event-dispatching-error', e);
+                            }	
+                    	}
                     }
                     setTimeout(function() {
                         self.reconnectAttempts++;
@@ -177,13 +212,27 @@
                 }
                 var e = new Event('message');
                 e.data = event.data;
-                eventTarget.dispatchEvent(e);
+                try {
+                	eventTarget.dispatchEvent(e);
+                } catch(e) {
+            		// internet explorer has a problem with that
+            		if (self.debug || ReconnectingWebSocket.debugAll) {
+                        console.debug('ReconnectingWebSocket', 'event-dispatching-error', e);
+                    }	
+            	}
             };
             ws.onerror = function(event) {
                 if (self.debug || ReconnectingWebSocket.debugAll) {
                     console.debug('ReconnectingWebSocket', 'onerror', url, event);
                 }
-                eventTarget.dispatchEvent(new Event('event'));
+                try {
+                	eventTarget.dispatchEvent(new Event('event'));
+                } catch(e) {
+            		// internet explorer has a problem with that
+            		if (self.debug || ReconnectingWebSocket.debugAll) {
+                        console.debug('ReconnectingWebSocket', 'event-dispatching-error', e);
+                    }	
+            	}
             };
         }
         connect(false);

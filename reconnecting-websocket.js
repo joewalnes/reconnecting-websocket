@@ -114,11 +114,28 @@
         this.removeEventListener = eventTarget.removeEventListener.bind(eventTarget);
         this.dispatchEvent = eventTarget.dispatchEvent.bind(eventTarget);
 
+        /**
+         * This function generates an event that is compatible with standard
+         * compliant browsers and IE9 - IE11
+         * 
+         * This will prevent the error:
+         * Object doesn't support this action
+         * 
+         * http://stackoverflow.com/questions/19345392/why-arent-my-parameters-getting-passed-through-to-a-dispatched-event/19345563#19345563
+         * @param s String The name that the event should use
+         * @param args Object an optional object that the event will use
+         */
+        function generateEvent(s, args) {
+        	var evt = document.createEvent("CustomEvent");
+        	evt.initCustomEvent(s, false, false, args);
+        	return evt;
+        };
+        
         function connect(reconnectAttempt) {
             ws = new WebSocket(url, protocols || []);
 
             if (!reconnectAttempt) {
-                eventTarget.dispatchEvent(new Event('connecting'));
+                eventTarget.dispatchEvent(generateEvent('connecting'));
             }
 
             if (self.debug || ReconnectingWebSocket.debugAll) {
@@ -143,7 +160,7 @@
                 self.protocol = ws.protocol;
                 self.readyState = WebSocket.OPEN;
                 self.reconnectAttempts = 0;
-                var e = new Event('open');
+                var e = generateEvent('open');
                 e.isReconnect = reconnectAttempt;
                 reconnectAttempt = false;
                 eventTarget.dispatchEvent(e);
@@ -155,15 +172,15 @@
                 if (forcedClose) {
                     self.readyState = WebSocket.CLOSED;
                     self.onclose(event);
-                    eventTarget.dispatchEvent(new Event('close'));
+                    eventTarget.dispatchEvent(generateEvent('close'));
                 } else {
                     self.readyState = WebSocket.CONNECTING;
-                    eventTarget.dispatchEvent(new Event('connecting'));
+                    eventTarget.dispatchEvent(generateEvent('connecting'));
                     if (!reconnectAttempt && !timedOut) {
                         if (self.debug || ReconnectingWebSocket.debugAll) {
                             console.debug('ReconnectingWebSocket', 'onclose', url);
                         }
-                        eventTarget.dispatchEvent(new Event('close'));
+                        eventTarget.dispatchEvent(generateEvent('close'));
                     }
                     setTimeout(function() {
                         self.reconnectAttempts++;
@@ -175,7 +192,7 @@
                 if (self.debug || ReconnectingWebSocket.debugAll) {
                     console.debug('ReconnectingWebSocket', 'onmessage', url, event.data);
                 }
-                var e = new Event('message');
+                var e = generateEvent('message');
                 e.data = event.data;
                 eventTarget.dispatchEvent(e);
             };
@@ -183,7 +200,7 @@
                 if (self.debug || ReconnectingWebSocket.debugAll) {
                     console.debug('ReconnectingWebSocket', 'onerror', url, event);
                 }
-                eventTarget.dispatchEvent(new Event('event'));
+                eventTarget.dispatchEvent(generateEvent('event'));
             };
         }
         connect(false);

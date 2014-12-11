@@ -40,7 +40,7 @@
  *  onopen  // sometime later...
  *  onmessage
  *  onmessage
- *  etc... 
+ *  etc...
  *
  * It is API compatible with the standard WebSocket API, apart from the following members:
  *
@@ -61,19 +61,38 @@
     }
 })(this, function () {
 
-    function ReconnectingWebSocket(url, protocols) {
-        // These can be altered by calling code.
+    function ReconnectingWebSocket(url, protocols, options) {
 
-        /** Whether this instance should log debug messages. */
-        this.debug = false;
-        /** The number of milliseconds to delay before attempting to reconnect. */
-        this.reconnectInterval = 1000;
-        /** The rate of increase of the reconnect delay. Allows reconnect attempts to back off when problems persist. */
-        this.reconnectDecay = 1.5;
-        /** The number of attempted reconnects since starting, or the last successful connection. */
-        this.reconnectAttempts = 0;
-        /** The maximum time in milliseconds to wait for a connection to succeed before closing and retrying. */
-        this.timeoutInterval = 2000;
+        // Default settings
+        var settings = {
+
+            /** Whether this instance should log debug messages. */
+            debug: false,
+
+            /** The number of milliseconds to delay before attempting to reconnect. */
+            reconnectInterval: 1000,
+
+            /** The rate of increase of the reconnect delay. Allows reconnect attempts to back off when problems persist. */
+            reconnectDecay: 1.5,
+
+            /** The number of attempted reconnects since starting, or the last successful connection. */
+            reconnectAttempts: 0,
+
+            /** The maximum time in milliseconds to wait for a connection to succeed before closing and retrying. */
+            timeoutInterval: 2000
+        }
+
+        // Merge settings with passed options
+        for (var key in options) {
+            if (typeof settings[key] !== 'undefined' ) {
+                settings[key] = options[key];
+            }
+        }
+
+        // Set object values from settings
+        for (var key in settings) {
+            this[key] = settings[key];
+        }
 
         // These should be treated as read-only properties
 
@@ -124,7 +143,7 @@
             if (self.debug || ReconnectingWebSocket.debugAll) {
                 console.debug('ReconnectingWebSocket', 'attempt-connect', url);
             }
-            
+
             var localWs = ws;
             var timeout = setTimeout(function() {
                 if (self.debug || ReconnectingWebSocket.debugAll) {
@@ -134,7 +153,7 @@
                 localWs.close();
                 timedOut = false;
             }, self.timeoutInterval);
-            
+
             ws.onopen = function(event) {
                 clearTimeout(timeout);
                 if (self.debug || ReconnectingWebSocket.debugAll) {
@@ -148,7 +167,7 @@
                 reconnectAttempt = false;
                 eventTarget.dispatchEvent(e);
             };
-            
+
             ws.onclose = function(event) {
                 clearTimeout(timeout);
                 ws = null;

@@ -65,39 +65,31 @@
 
         // Default settings
         var settings = {
-
             /** Whether this instance should log debug messages. */
             debug: false,
-
             /** The number of milliseconds to delay before attempting to reconnect. */
             reconnectInterval: 1000,
-
             /** The rate of increase of the reconnect delay. Allows reconnect attempts to back off when problems persist. */
             reconnectDecay: 1.5,
-
-            /** The number of attempted reconnects since starting, or the last successful connection. */
-            reconnectAttempts: 0,
-
             /** The maximum time in milliseconds to wait for a connection to succeed before closing and retrying. */
             timeoutInterval: 2000
         }
 
-        // Merge settings with passed options
-        for (var key in options) {
-            if (typeof settings[key] !== 'undefined' ) {
-                settings[key] = options[key];
-            }
-        }
-
-        // Set object values from settings
+        // Overwrite and define settings with options if they exist.
         for (var key in settings) {
-            this[key] = settings[key];
+            if (typeof options[key] !== 'undefined') {
+                this[key] = options[key];
+            } else {
+                this[key] = settings[key];
+            }
         }
 
         // These should be treated as read-only properties
 
         /** The URL as resolved by the constructor. This is always an absolute URL. Read only. */
         this.url = url;
+        /** The number of attempted reconnects since starting, or the last successful connection. Read only. */
+        this.reconnectAttempts = 0;
         /**
          * The current state of the connection.
          * Can be one of: WebSocket.CONNECTING, WebSocket.OPEN, WebSocket.CLOSING, WebSocket.CLOSED

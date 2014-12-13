@@ -88,7 +88,7 @@ or
 - Accepts `integer` or `float`
 - Default: `1.5`
 
-#### `timeoutInterval` - `[integer]`
+#### `timeoutInterval`
 - The maximum time in milliseconds to wait for a connection to succeed before closing and retrying.
 - Accepts `integer`
 - Default: `2000`

@@ -217,11 +217,14 @@
                 ws = null;
                 if (forcedClose) {
                     self.readyState = WebSocket.CLOSED;
-                    self.onclose(event);
                     eventTarget.dispatchEvent(generateEvent('close'));
                 } else {
                     self.readyState = WebSocket.CONNECTING;
-                    eventTarget.dispatchEvent(generateEvent('connecting'));
+                    var e = generateEvent('connecting');
+                    e.code = event.code;
+                    e.reason = event.reason;
+                    e.wasClean = event.wasClean;
+                    eventTarget.dispatchEvent(e);
                     if (!reconnectAttempt && !timedOut) {
                         if (self.debug || ReconnectingWebSocket.debugAll) {
                             console.debug('ReconnectingWebSocket', 'onclose', url);
@@ -246,7 +249,7 @@
                 if (self.debug || ReconnectingWebSocket.debugAll) {
                     console.debug('ReconnectingWebSocket', 'onerror', url, event);
                 }
-                eventTarget.dispatchEvent(generateEvent('event'));
+                eventTarget.dispatchEvent(generateEvent('error'));
             };
         }
         connect(false);

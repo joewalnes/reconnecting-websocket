@@ -79,6 +79,9 @@
  * reconnectInterval
  * - The number of milliseconds to delay before attempting to reconnect. Accepts integer. Default: 1000.
  *
+ * maxReconnectInterval
+ * - The maximum number of milliseconds to delay a reconnection attempt. Accepts integer. Default: 30000.
+ *
  * reconnectDecay
  * - The rate of increase of the reconnect delay. Allows reconnect attempts to back off when problems persist. Accepts integer or float. Default: 1.5.
  *
@@ -105,7 +108,7 @@
             /** The number of milliseconds to delay before attempting to reconnect. */
             reconnectInterval: 1000,
             /** The maximum number of milliseconds to delay a reconnection attempt. */
-            maxReconnectInterval: -1,
+            maxReconnectInterval: 30000,
             /** The rate of increase of the reconnect delay. Allows reconnect attempts to back off when problems persist. */
             reconnectDecay: 1.5,
             /** The maximum time in milliseconds to wait for a connection to succeed before closing and retrying. */
@@ -234,14 +237,12 @@
                         }
                         eventTarget.dispatchEvent(generateEvent('close'));
                     }
-                    var timeout = self.reconnectInterval * Math.pow(self.reconnectDecay, self.reconnectAttempts);
-                    if (self.maxReconnectInterval != -1 && timeout > self.maxReconnectInterval)
-                        timeout = self.maxReconnectInterval;
 
+                    var timeout = self.reconnectInterval * Math.pow(self.reconnectDecay, self.reconnectAttempts);
                     setTimeout(function() {
                         self.reconnectAttempts++;
                         connect(true);
-                    }, timeout);
+                    }, timeout > self.maxReconnectInterval ? self.maxReconnectInterval : timeout);
                 }
             };
             ws.onmessage = function(event) {

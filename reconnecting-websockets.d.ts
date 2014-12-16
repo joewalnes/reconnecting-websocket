@@ -23,6 +23,9 @@ declare class ReconnectingWebSocket
     /** The number of milliseconds to delay before attempting to reconnect. */
     public reconnectInterval: number;
 
+	/** The maximum number of milliseconds to delay a reconnection attempt. */
+	public maxReconnectInterval: number;
+
     /** The rate of increase of the reconnect delay. Allows reconnect attempts to back off when problems persist. */
     public reconnectDecay: number;
 

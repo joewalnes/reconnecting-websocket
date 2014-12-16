@@ -109,6 +109,7 @@
             /** The maximum time in milliseconds to wait for a connection to succeed before closing and retrying. */
             timeoutInterval: 2000
         }
+        if (!options) { options = {}; }
 
         // Overwrite and define settings with options if they exist.
         for (var key in settings) {

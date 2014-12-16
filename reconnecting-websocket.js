@@ -104,6 +104,8 @@
             debug: false,
             /** The number of milliseconds to delay before attempting to reconnect. */
             reconnectInterval: 1000,
+            /** The maximum number of milliseconds to delay a reconnection attempt. */
+            maxReconnectInterval: -1,
             /** The rate of increase of the reconnect delay. Allows reconnect attempts to back off when problems persist. */
             reconnectDecay: 1.5,
             /** The maximum time in milliseconds to wait for a connection to succeed before closing and retrying. */
@@ -232,10 +234,14 @@
                         }
                         eventTarget.dispatchEvent(generateEvent('close'));
                     }
+                    var timeout = self.reconnectInterval * Math.pow(self.reconnectDecay, self.reconnectAttempts);
+                    if (self.maxReconnectInterval != -1 && timeout > self.maxReconnectInterval)
+                        timeout = self.maxReconnectInterval;
+
                     setTimeout(function() {
                         self.reconnectAttempts++;
                         connect(true);
-                    }, self.reconnectInterval * Math.pow(self.reconnectDecay, self.reconnectAttempts));
+                    }, timeout);
                 }
             };
             ws.onmessage = function(event) {

@@ -238,11 +238,11 @@
                         eventTarget.dispatchEvent(generateEvent('close'));
                     }
 
-                    var timeout = self.reconnectInterval * Math.pow(self.reconnectDecay, self.reconnectAttempts);
                     setTimeout(function() {
                         self.reconnectAttempts++;
                         connect(true);
-                    }, timeout > self.maxReconnectInterval ? self.maxReconnectInterval : timeout);
+                    }, Math.min(self.reconnectInterval * Math.pow(self.reconnectDecay, self.reconnectAttempts), 
+                                self.maxReconnectInterval));
                 }
             };
             ws.onmessage = function(event) {

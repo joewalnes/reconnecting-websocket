@@ -76,6 +76,9 @@
  * debug
  * - Whether this instance should log debug messages. Accepts true or false. Default: false.
  *
+ * automaticOpen
+ * - Whether or not the websocket should attempt to connect immediately upon instantiation. The socket can be manually opened or closed at any time using ws.open() and ws.close().
+ *
  * reconnectInterval
  * - The number of milliseconds to delay before attempting to reconnect. Accepts integer. Default: 1000.
  *

@@ -88,6 +88,11 @@ or
 - Accepts `integer`
 - Default: `1000`
 
+#### `maxReconnectInterval`
+- The maximum number of milliseconds to delay a reconnection attempt.
+- Accepts `integer`
+- Default: `30000`
+
 ####`reconnectDecay`
 - The rate of increase of the reconnect delay. Allows reconnect attempts to back off when problems persist.
 - Accepts `integer` or `float`

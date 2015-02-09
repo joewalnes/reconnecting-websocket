@@ -5,11 +5,15 @@ A small JavaScript library that decorates the WebSocket API to provide a WebSock
 
 It is API compatible, so when you have:
 
-    ws = new WebSocket('ws://....');
+```javascript
+var ws = new WebSocket('ws://....');
+```
 
 you can replace with:
 
-    ws = new ReconnectingWebSocket('ws://....');
+```javascript
+var ws = new ReconnectingWebSocket('ws://....');
+```
 
 Minified library with gzip compression is less than 600 bytes.
 
@@ -48,7 +52,9 @@ This is all handled automatically for you by the library.
 
 ## Parameters
 
-`var socket = new ReconnectingWebSocket(url, protocols, options);`
+```javascript
+var socket = new ReconnectingWebSocket(url, protocols, options);
+```
 
 #### `url`
 - The URL you are connecting to.
@@ -65,13 +71,17 @@ This is all handled automatically for you by the library.
 
 Options can either be passed as the 3rd parameter upon instantiation or set directly on the object after instantiation:
 
-`var socket = new ReconnectingWebSocket(url, null, {debug: true, reconnectInterval: 3000});`
+```javascript
+var socket = new ReconnectingWebSocket(url, null, {debug: true, reconnectInterval: 3000});
+```
 
 or
 
-    var socket = new ReconnectingWebSocket(url);
-    socket.debug = true;
-    socket.timeoutInterval = 5400;
+```javascript
+var socket = new ReconnectingWebSocket(url);
+socket.debug = true;
+socket.timeoutInterval = 5400;
+```
 
 #### `debug`
 - Whether this instance should log debug messages or not. Debug messages are printed to `console.debug()`.

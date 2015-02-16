@@ -93,8 +93,8 @@ declare class ReconnectingWebSocket
     addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
 
     addEventListener(type: string, listener: EventListener, useCapture?: boolean): void;
-    removeEventListener(name: string, listener: (ev: Event) => any, useCapture?: boolean);
-    dispatchEvent(event: Event);
+    removeEventListener(name: string, listener: (ev: Event) => any, useCapture?: boolean): void;
+    dispatchEvent(event: Event): void;
 
     /**
      * Transmits data to the server over the WebSocket connection.

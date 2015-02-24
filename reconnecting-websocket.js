@@ -102,6 +102,10 @@
     }
 })(this, function () {
 
+    if (!('WebSocket' in window)) {
+        return;
+    }
+
     function ReconnectingWebSocket(url, protocols, options) {
 
         // Default settings

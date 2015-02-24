@@ -201,12 +201,13 @@
         this.open = function (reconnectAttempt) {
             ws = new WebSocket(self.url, protocols || []);
 
-            if (!reconnectAttempt) {
+            if (reconnectAttempt) {
+                if (this.maxReconnectAttempts && this.reconnectAttempts > this.maxReconnectAttempts) {
+                    return;
+                }
+            } else {
                 eventTarget.dispatchEvent(generateEvent('connecting'));
-            }
-
-            if (this.maxReconnectAttempts && this.reconnectAttempts > this.maxReconnectAttempts) {
-                return;
+                this.reconnectAttempts = 0;
             }
 
             if (self.debug || ReconnectingWebSocket.debugAll) {

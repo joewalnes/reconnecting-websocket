@@ -126,6 +126,9 @@
 
             /** The maximum time in milliseconds to wait for a connection to succeed before closing and retrying. */
             timeoutInterval: 2000
+
+            /** The maximum number of reconnection attempts to make. Unlimited if null. */
+            maxReconnectAttempts: null,
         }
         if (!options) { options = {}; }
 
@@ -202,8 +205,13 @@
         this.open = function (reconnectAttempt) {
             ws = new WebSocket(self.url, protocols || []);
 
-            if (!reconnectAttempt) {
+            if (reconnectAttempt) {
+                if (this.maxReconnectAttempts && this.reconnectAttempts > this.maxReconnectAttempts) {
+                    return;
+                }
+            } else {
                 eventTarget.dispatchEvent(generateEvent('connecting'));
+                this.reconnectAttempts = 0;
             }
 
             if (self.debug || ReconnectingWebSocket.debugAll) {

@@ -35,6 +35,9 @@ declare class ReconnectingWebSocket
     /** The maximum time in milliseconds to wait for a connection to succeed before closing and retrying. */
     public timeoutInterval: number;
 
+    /** The maximum number of reconnection attempts to make. Unlimited if null. */
+    public maxReconnectAttempts?: number;
+
     /** An event listener to be called when a connection begins being attempted. */
     onconnecting: (ev: Event) => any;
 

@@ -113,6 +113,11 @@ socket.timeoutInterval = 5400;
 - Accepts `integer`
 - Default: `2000`
 
+#### `maxReconnectAttempts`
+- The maximum number of reconnection attempts that will be made before giving up. If null, reconnection attempts will be continue to be made forever.
+- Accepts `integer` or `null`.
+- Default: `null`
+
 ---
 
 ## Methods

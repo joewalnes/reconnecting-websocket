@@ -91,6 +91,11 @@
  * timeoutInterval
  * - The maximum time in milliseconds to wait for a connection to succeed before closing and retrying. Accepts integer. Default: 2000.
  *
+ * sleepOnBlur
+ * - Whether or not to start a disconnect countdown when window loses focus. Default: false
+ * 
+ * sleepOnBlurTimeout
+ * - number of milliseconds to wait before closing connection when window is out of focus. Default: 60000
  */
 (function (global, factory) {
     if (typeof define === 'function' && define.amd) {
@@ -128,7 +133,13 @@
             timeoutInterval: 2000,
 
             /** The maximum number of reconnection attempts to make. Unlimited if null. */
-            maxReconnectAttempts: null
+            maxReconnectAttempts: null,
+            
+            /** window.blur = kill connection , window.focus = open connection */
+            sleepOnBlur : false,
+            
+            /** number in milliseconds before killing connection **/
+            sleepOnBlurTimeout: 60000
         }
         if (!options) { options = {}; }
 
@@ -140,6 +151,8 @@
                 this[key] = settings[key];
             }
         }
+        
+        
 
         // These should be treated as read-only properties
 
@@ -170,6 +183,52 @@
         var forcedClose = false;
         var timedOut = false;
         var eventTarget = document.createElement('div');
+        var sleeping = false;
+        var sleepTimer = null;
+        var debug = self.debug || ReconnectingWebSocket.debugAll || false;
+                
+        //sleep connections if window loses focus
+        window.addEventListener('blur',function() {
+            if (debug) {
+                console.debug('ReconnectingWebSocket', 'sleepOnBlur: window.onblur');
+            }
+            if(!self.sleepOnBlur){
+                if (debug) {
+                    console.debug('ReconnectingWebSocket', 'sleepOnBlur : nothing to do');
+                }
+                return;
+            }
+            sleepTimer = setTimeout(function() {
+                if (debug) {
+                    console.debug('ReconnectingWebSocket', 'sleepOnBlur: disconnect in progress');
+                }
+                self.close(1000,'sleeping');// going away status code + message
+                sleeping = true;
+            }, self.sleepOnBlurTimeout );
+        });
+
+        window.addEventListener('focus', function() {
+            if (debug) {
+                console.debug('ReconnectingWebSocket', 'sleepOnBlur: window.onfocus');
+            }
+            if(!self.sleepOnBlur){
+                return;
+            }
+            if(!sleeping && sleepTimer !== null) {
+                /*timeout hasnt executed yet */
+                clearTimeout(sleepTimer);
+                if (debug) {
+                    console.debug('ReconnectingWebSocket', 'sleepOnBlur: timeout cleared');
+                }
+            }else{
+                if (debug) {
+                    console.debug('ReconnectingWebSocket', 'sleepOnBlur: reconnect in progress');
+                }
+                self.open();
+            }
+            sleepTimer = null;
+            sleeping = false;
+        });
 
         // Wire up "on*" properties as event handlers
 
@@ -197,9 +256,9 @@
          * @param args Object an optional object that the event will use
          */
         function generateEvent(s, args) {
-        	var evt = document.createEvent("CustomEvent");
-        	evt.initCustomEvent(s, false, false, args);
-        	return evt;
+            var evt = document.createEvent("CustomEvent");
+            evt.initCustomEvent(s, false, false, args);
+            return evt;
         };
 
         this.open = function (reconnectAttempt) {

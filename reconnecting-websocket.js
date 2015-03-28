@@ -180,32 +180,49 @@
         var eventTarget = document.createElement('div');
         var sleeping = false;
         var sleepTimer = null;
-        
+        var debug = self.debug || ReconnectingWebSocket.debugAll || false;
+                
         //sleep connections if window loses focus
         window.onblur = function() {
+            if (debug) {
+                console.debug('ReconnectingWebSocket', 'sleepOnBlur: window.onblur');
+            }
             if(!self.sleepOnBlur){
+                if (debug) {
+                    console.debug('ReconnectingWebSocket', 'sleepOnBlur : nothing to do');
+                }
                 return;
             }
-            sleepTimer = setInterval(function() {
-                self.close(1001,'sleeping');// going away status code + message
+            sleepTimer = setTimeout(function() {
+                if (debug) {
+                    console.debug('ReconnectingWebSocket', 'sleepOnBlur: disconnect in progress');
+                }
+                self.close(1000,'sleeping');// going away status code + message
                 sleeping = true;
             }, self.sleepOnBlurTimeout );
         }
-        
+
         window.onfocus = function() {
+            if (debug) {
+                console.debug('ReconnectingWebSocket', 'sleepOnBlur: window.onfocus');
+            }
             if(!self.sleepOnBlur){
                 return;
             }
-            if(sleepTimer !== null) {
-                if(!sleeping) {
-                    /*timeout hasnt executed yet */
-                    clearTimeout(sleepTimer);
-                }else{
-                    self.open();
+            if(!sleeping && sleepTimer !== null) {
+                /*timeout hasnt executed yet */
+                clearTimeout(sleepTimer);
+                if (debug) {
+                    console.debug('ReconnectingWebSocket', 'sleepOnBlur: timeout cleared');
                 }
-                sleepTimer = null;
-                sleeping = false;
+            }else{
+                if (debug) {
+                    console.debug('ReconnectingWebSocket', 'sleepOnBlur: reconnect in progress');
+                }
+                self.open();
             }
+            sleepTimer = null;
+            sleeping = false;
         }
 
         // Wire up "on*" properties as event handlers
@@ -234,9 +251,9 @@
          * @param args Object an optional object that the event will use
          */
         function generateEvent(s, args) {
-        	var evt = document.createEvent("CustomEvent");
-        	evt.initCustomEvent(s, false, false, args);
-        	return evt;
+            var evt = document.createEvent("CustomEvent");
+            evt.initCustomEvent(s, false, false, args);
+            return evt;
         };
 
         this.open = function (reconnectAttempt) {

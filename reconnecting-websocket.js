@@ -91,6 +91,11 @@
  * timeoutInterval
  * - The maximum time in milliseconds to wait for a connection to succeed before closing and retrying. Accepts integer. Default: 2000.
  *
+ * sleepOnBlur
+ * - Whether or not to start a disconnect countdown when window loses focus. Default: false
+ * 
+ * sleepOnBlurTimeout
+ * - number of milliseconds to wait before closing connection when window is out of focus. Default: 60000
  */
 (function (global, factory) {
     if (typeof define === 'function' && define.amd) {
@@ -183,7 +188,7 @@
         var debug = self.debug || ReconnectingWebSocket.debugAll || false;
                 
         //sleep connections if window loses focus
-        window.onblur = function() {
+        window.addEventListener('blur',function() {
             if (debug) {
                 console.debug('ReconnectingWebSocket', 'sleepOnBlur: window.onblur');
             }
@@ -200,9 +205,9 @@
                 self.close(1000,'sleeping');// going away status code + message
                 sleeping = true;
             }, self.sleepOnBlurTimeout );
-        }
+        });
 
-        window.onfocus = function() {
+        window.addEventListener('focus', function() {
             if (debug) {
                 console.debug('ReconnectingWebSocket', 'sleepOnBlur: window.onfocus');
             }
@@ -223,7 +228,7 @@
             }
             sleepTimer = null;
             sleeping = false;
-        }
+        });
 
         // Wire up "on*" properties as event handlers
 

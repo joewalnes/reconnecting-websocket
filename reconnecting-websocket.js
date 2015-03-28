@@ -128,7 +128,13 @@
             timeoutInterval: 2000,
 
             /** The maximum number of reconnection attempts to make. Unlimited if null. */
-            maxReconnectAttempts: null
+            maxReconnectAttempts: null,
+            
+            /** window.blur = kill connection , window.focus = open connection */
+            sleepOnBlur : false,
+            
+            /** number in milliseconds before killing connection **/
+            sleepOnBlurTimeout: 60000
         }
         if (!options) { options = {}; }
 
@@ -140,6 +146,8 @@
                 this[key] = settings[key];
             }
         }
+        
+        
 
         // These should be treated as read-only properties
 
@@ -170,6 +178,35 @@
         var forcedClose = false;
         var timedOut = false;
         var eventTarget = document.createElement('div');
+        var sleeping = false;
+        var sleepTimer = null;
+        
+        //sleep connections if window loses focus
+        window.onblur = function() {
+            if(!self.sleepOnBlur){
+                return;
+            }
+            sleepTimer = setInterval(function() {
+                self.close(1001,'sleeping');// going away status code + message
+                sleeping = true;
+            }, self.sleepOnBlurTimeout );
+        }
+        
+        windown.onfocus = function() {
+            if(!self.sleepOnBlur){
+                return;
+            }
+            if(sleepTimer !== null) {
+                if(!sleeping) {
+                    /*timeout hasnt executed yet */
+                    clearTimeout(sleepTimer);
+                }else{
+                    self.open();
+                }
+                sleepTimer = null;
+                sleeping = false;
+            }
+        }
 
         // Wire up "on*" properties as event handlers
 

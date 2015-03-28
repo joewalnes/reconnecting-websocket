@@ -192,7 +192,7 @@
             }, self.sleepOnBlurTimeout );
         }
         
-        windown.onfocus = function() {
+        window.onfocus = function() {
             if(!self.sleepOnBlur){
                 return;
             }

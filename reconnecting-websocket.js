@@ -125,11 +125,11 @@
             reconnectDecay: 1.5,
 
             /** The maximum time in milliseconds to wait for a connection to succeed before closing and retrying. */
-            timeoutInterval: 2000,
+            timeoutInterval: 3000,
 
             /** The maximum number of reconnection attempts to make. Unlimited if null. */
-            maxReconnectAttempts: null
-        }
+            maxReconnectAttempts: 50
+        };
         if (!options) { options = {}; }
 
         // Overwrite and define settings with options if they exist.
@@ -178,6 +178,7 @@
         eventTarget.addEventListener('connecting', function(event) { self.onconnecting(event); });
         eventTarget.addEventListener('message',    function(event) { self.onmessage(event); });
         eventTarget.addEventListener('error',      function(event) { self.onerror(event); });
+        eventTarget.addEventListener('maxAttemptsExceed',      function(event) { self.onmaxattemptsexceed(event); });
 
         // Expose the API required by EventTarget
 
@@ -197,16 +198,17 @@
          * @param args Object an optional object that the event will use
          */
         function generateEvent(s, args) {
-        	var evt = document.createEvent("CustomEvent");
-        	evt.initCustomEvent(s, false, false, args);
-        	return evt;
-        };
+            var evt = document.createEvent("CustomEvent");
+            evt.initCustomEvent(s, false, false, args);
+            return evt;
+        }
 
         this.open = function (reconnectAttempt) {
             ws = new WebSocket(self.url, protocols || []);
 
             if (reconnectAttempt) {
                 if (this.maxReconnectAttempts && this.reconnectAttempts > this.maxReconnectAttempts) {
+                    eventTarget.dispatchEvent(generateEvent('maxAttemptsExceed'));
                     return;
                 }
             } else {
@@ -262,11 +264,11 @@
                         eventTarget.dispatchEvent(generateEvent('close'));
                     }
 
-                    var timeout = self.reconnectInterval * Math.pow(self.reconnectDecay, self.reconnectAttempts);
+                    var delay = self.reconnectInterval * Math.pow(self.reconnectDecay, self.reconnectAttempts);
                     setTimeout(function() {
                         self.reconnectAttempts++;
                         self.open(true);
-                    }, timeout > self.maxReconnectInterval ? self.maxReconnectInterval : timeout);
+                    }, delay > self.maxReconnectInterval ? self.maxReconnectInterval : delay);
                 }
             };
             ws.onmessage = function(event) {
@@ -283,10 +285,10 @@
                 }
                 eventTarget.dispatchEvent(generateEvent('error'));
             };
-        }
+        };
 
         // Whether or not to create a websocket upon instantiation
-        if (this.automaticOpen == true) {
+        if (this.automaticOpen === true) {
             this.open(false);
         }
 
@@ -345,6 +347,8 @@
     ReconnectingWebSocket.prototype.onmessage = function(event) {};
     /** An event listener to be called when an error occurs. */
     ReconnectingWebSocket.prototype.onerror = function(event) {};
+    /** An event listener to be called when connecting attempts exceeded */
+    ReconnectingWebSocket.prototype.onmaxattemptsexceed = function(event) {};
 
     /**
      * Whether all instances of ReconnectingWebSocket should log debug messages.

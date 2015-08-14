@@ -128,7 +128,10 @@
             timeoutInterval: 2000,
 
             /** The maximum number of reconnection attempts to make. Unlimited if null. */
-            maxReconnectAttempts: null
+            maxReconnectAttempts: null,
+
+            /** The binary type, possible values 'blob' or 'arraybuffer', default 'blob'. */
+            binaryType: 'blob'
         }
         if (!options) { options = {}; }
 
@@ -204,6 +207,7 @@
 
         this.open = function (reconnectAttempt) {
             ws = new WebSocket(self.url, protocols || []);
+            ws.binaryType = this.binaryType;
 
             if (reconnectAttempt) {
                 if (this.maxReconnectAttempts && this.reconnectAttempts > this.maxReconnectAttempts) {

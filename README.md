@@ -118,6 +118,11 @@ socket.timeoutInterval = 5400;
 - Accepts `integer` or `null`.
 - Default: `null`
 
+#### `binaryType`
+- The binary type is required by some applications.
+- Accepts strings `'blob'` or `'arraybuffer'`.
+- Default: `'blob'`
+
 ---
 
 ## Methods

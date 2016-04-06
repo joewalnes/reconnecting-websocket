@@ -304,12 +304,33 @@
                 if (self.debug || ReconnectingWebSocket.debugAll) {
                     console.debug('ReconnectingWebSocket', 'send', self.url, data);
                 }
-                return ws.send(data);
+                this.waitForConnection(function () {
+                    return ws.send(data);
+			        if (typeof callback !== 'undefined') {
+			          callback();
+			        }
+			    }, 1000);
             } else {
                 throw 'INVALID_STATE_ERR : Pausing to reconnect websocket';
             }
         };
-
+        
+        /**
+         * Waits send method until connection is opened.
+         * @param callback.When ready state is 1, data is sent. 
+         * @param interval.It's used by timeut function.
+         */
+        this.waitForConnection = function (callback, interval) {
+            if (ws.readyState === 1) {
+                callback();
+            } else {
+                var that = this;
+                setTimeout(function () {
+                    that.waitForConnection(callback, interval);
+                }, interval);
+            }
+        };
+ 
         /**
          * Closes the WebSocket connection or connection attempt, if any.
          * If the connection is already CLOSED, this method does nothing.

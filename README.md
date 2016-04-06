@@ -58,11 +58,11 @@ var socket = new ReconnectingWebSocket(url, protocols, options);
 
 #### `url`
 - The URL you are connecting to.
-- http://dev.w3.org/html5/websockets/#the-websocket-interface
+- https://html.spec.whatwg.org/multipage/comms.html#network
 
 #### `protocols`
 - Optional string or array of protocols per the WebSocket spec.
-- [http://dev.w3.org/html5/websockets/#refsWSP
+- https://tools.ietf.org/html/rfc6455
 
 #### `options`
 - Options (see below)

@@ -304,6 +304,8 @@
                 if (self.debug || ReconnectingWebSocket.debugAll) {
                     console.debug('ReconnectingWebSocket', 'send', self.url, data);
                 }
+                // Ensure the binaryType is set if the user changes the type after creation.
+                ws.binaryType = self.binaryType;
                 return ws.send(data);
             } else {
                 throw 'INVALID_STATE_ERR : Pausing to reconnect websocket';

@@ -268,8 +268,10 @@
 
                     var timeout = self.reconnectInterval * Math.pow(self.reconnectDecay, self.reconnectAttempts);
                     setTimeout(function() {
-                        self.reconnectAttempts++;
-                        self.open(true);
+                    	if (!forcedClose) {
+	                        self.reconnectAttempts++;
+	                        self.open(true);
+                    	}
                     }, timeout > self.maxReconnectInterval ? self.maxReconnectInterval : timeout);
                 }
             };

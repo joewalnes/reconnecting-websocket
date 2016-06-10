@@ -57,7 +57,7 @@
  *
  * Parameters
  * ==========
- * url - The url you are connecting to.
+ * url - The url you are connecting to, or a function to provide the function.
  * protocols - Optional string or array of protocols.
  * options - See below
  *
@@ -143,8 +143,8 @@
 
         // These should be treated as read-only properties
 
-        /** The URL as resolved by the constructor. This is always an absolute URL. Read only. */
-        this.url = url;
+        /** The URL as resolved by the constructor, or a function to return the current url. This is always an absolute URL. Read only. */
+        this.getUrl = typeof(url) === 'function' ? url : function() { return url; }
 
         /** The number of attempted reconnects since starting, or the last successful connection. Read only. */
         this.reconnectAttempts = 0;
@@ -203,7 +203,7 @@
         };
 
         this.open = function (reconnectAttempt) {
-            ws = new WebSocket(self.url, protocols || []);
+            ws = new WebSocket(self.getUrl(), protocols || []);
 
             if (reconnectAttempt) {
                 if (this.maxReconnectAttempts && this.reconnectAttempts > this.maxReconnectAttempts) {
@@ -215,13 +215,13 @@
             }
 
             if (self.debug || ReconnectingWebSocket.debugAll) {
-                console.debug('ReconnectingWebSocket', 'attempt-connect', self.url);
+                console.debug('ReconnectingWebSocket', 'attempt-connect', self.getUrl());
             }
 
             var localWs = ws;
             var timeout = setTimeout(function() {
                 if (self.debug || ReconnectingWebSocket.debugAll) {
-                    console.debug('ReconnectingWebSocket', 'connection-timeout', self.url);
+                    console.debug('ReconnectingWebSocket', 'connection-timeout', self.getUrl());
                 }
                 timedOut = true;
                 localWs.close();
@@ -231,7 +231,7 @@
             ws.onopen = function(event) {
                 clearTimeout(timeout);
                 if (self.debug || ReconnectingWebSocket.debugAll) {
-                    console.debug('ReconnectingWebSocket', 'onopen', self.url);
+                    console.debug('ReconnectingWebSocket', 'onopen', self.getUrl());
                 }
                 self.protocol = ws.protocol;
                 self.readyState = WebSocket.OPEN;
@@ -257,7 +257,7 @@
                     eventTarget.dispatchEvent(e);
                     if (!reconnectAttempt && !timedOut) {
                         if (self.debug || ReconnectingWebSocket.debugAll) {
-                            console.debug('ReconnectingWebSocket', 'onclose', self.url);
+                            console.debug('ReconnectingWebSocket', 'onclose', self.getUrl());
                         }
                         eventTarget.dispatchEvent(generateEvent('close'));
                     }
@@ -273,7 +273,7 @@
             };
             ws.onmessage = function(event) {
                 if (self.debug || ReconnectingWebSocket.debugAll) {
-                    console.debug('ReconnectingWebSocket', 'onmessage', self.url, event.data);
+                    console.debug('ReconnectingWebSocket', 'onmessage', self.getUrl(), event.data);
                 }
                 var e = generateEvent('message');
                 e.data = event.data;
@@ -281,7 +281,7 @@
             };
             ws.onerror = function(event) {
                 if (self.debug || ReconnectingWebSocket.debugAll) {
-                    console.debug('ReconnectingWebSocket', 'onerror', self.url, event);
+                    console.debug('ReconnectingWebSocket', 'onerror', self.getUrl(), event);
                 }
                 eventTarget.dispatchEvent(generateEvent('error'));
             };
@@ -300,7 +300,7 @@
         this.send = function(data) {
             if (ws) {
                 if (self.debug || ReconnectingWebSocket.debugAll) {
-                    console.debug('ReconnectingWebSocket', 'send', self.url, data);
+                    console.debug('ReconnectingWebSocket', 'send', self.getUrl(), data);
                 }
                 return ws.send(data);
             } else {

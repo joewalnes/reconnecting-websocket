@@ -1,5 +1,9 @@
 ReconnectingWebSocket
 =====================
+****
+**Major notice, this is a library developed by Joe Walnes, I have made a small change
+to the implementations: see [pull request](https://github.com/joewalnes/reconnecting-websocket/pull/76). I have decided to publish this to npm so that I can use it with yarn. **
+****
 
 A small JavaScript library that decorates the WebSocket API to provide a WebSocket connection that will automatically reconnect if the connection is dropped.
 

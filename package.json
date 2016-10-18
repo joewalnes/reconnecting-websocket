@@ -11,6 +11,9 @@
     "url": "git://github.com/joewalnes/reconnecting-websocket.git"
   },
   "author": "Joe Walnes",
+  "contributors": [
+    { "name" : "Jóhan Davidsen", "email" : "johan.davidsen@fjakkarin.com", "url" : "https://fjakkarin.com" }
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/joewalnes/reconnecting-websocket/issues"

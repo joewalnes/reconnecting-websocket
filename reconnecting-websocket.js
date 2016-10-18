@@ -102,7 +102,7 @@
     }
 })(this, function () {
 
-    if (!('WebSocket' in window)) {
+    if (!global.window || !('WebSocket' in global.window)) {
         return;
     }
 

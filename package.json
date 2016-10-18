@@ -1,5 +1,5 @@
 {
-  "name": "@johandavidsen/ReconnectingWebSocket",
+  "name": "ReconnectingWebSocket",
   "version": "1.0.1",
   "description": "A small JavaScript library that decorates the WebSocket API to provide a WebSocket connection that will automatically reconnect if the connection is dropped.",
   "main": "reconnecting-websocket.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/johandavidsen/reconnecting-websocket.git"
+    "url": "git://github.com/joewalnes/reconnecting-websocket.git"
   },
   "author": "Joe Walnes",
   "contributors": [
@@ -16,7 +16,7 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/johandavidsen/reconnecting-websocket/issues"
+    "url": "https://github.com/joewalnes/reconnecting-websocket/issues"
   },
-  "homepage": "https://github.com/johandavidsen/reconnecting-websocket"
+  "homepage": "https://github.com/joewalnes/reconnecting-websocket"
 }

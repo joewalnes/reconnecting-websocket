@@ -200,9 +200,9 @@
          * @param args Object an optional object that the event will use
          */
         function generateEvent(s, args) {
-        	var evt = document.createEvent("CustomEvent");
-        	evt.initCustomEvent(s, false, false, args);
-        	return evt;
+            var evt = document.createEvent("CustomEvent");
+            evt.initCustomEvent(s, false, false, args);
+            return evt;
         };
 
         this.open = function (reconnectAttempt) {

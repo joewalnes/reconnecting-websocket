@@ -206,14 +206,14 @@
         };
 
         this.open = function (reconnectAttempt) {
+            if (reconnectAttempt && this.maxReconnectAttempts && this.reconnectAttempts > this.maxReconnectAttempts) {
+                return;
+            }
+
             ws = new WebSocket(self.url, protocols || []);
             ws.binaryType = this.binaryType;
 
-            if (reconnectAttempt) {
-                if (this.maxReconnectAttempts && this.reconnectAttempts > this.maxReconnectAttempts) {
-                    return;
-                }
-            } else {
+            if (!reconnectAttempt) {
                 eventTarget.dispatchEvent(generateEvent('connecting'));
                 this.reconnectAttempts = 0;
             }

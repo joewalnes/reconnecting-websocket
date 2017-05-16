@@ -103,7 +103,7 @@ socket.timeoutInterval = 5400;
 - Accepts `integer`
 - Default: `30000`
 
-####`reconnectDecay`
+#### `reconnectDelay`
 - The rate of increase of the reconnect delay. Allows reconnect attempts to back off when problems persist.
 - Accepts `integer` or `float`
 - Default: `1.5`

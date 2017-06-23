@@ -254,10 +254,17 @@
                     eventTarget.dispatchEvent(generateEvent('close'));
                 } else {
                     self.readyState = WebSocket.CONNECTING;
+
+                    var timeout = self.reconnectInterval * Math.pow(self.reconnectDecay, self.reconnectAttempts);
+                    if (timeout > self.maxReconnectInterval) {
+                        timeout = self.maxReconnectInterval;
+                    }
+
                     var e = generateEvent('connecting');
                     e.code = event.code;
                     e.reason = event.reason;
                     e.wasClean = event.wasClean;
+                    e.timeout = timeout;
                     eventTarget.dispatchEvent(e);
                     if (!reconnectAttempt && !timedOut) {
                         if (self.debug || ReconnectingWebSocket.debugAll) {
@@ -266,11 +273,10 @@
                         eventTarget.dispatchEvent(generateEvent('close'));
                     }
 
-                    var timeout = self.reconnectInterval * Math.pow(self.reconnectDecay, self.reconnectAttempts);
                     setTimeout(function() {
                         self.reconnectAttempts++;
                         self.open(true);
-                    }, timeout > self.maxReconnectInterval ? self.maxReconnectInterval : timeout);
+                    }, timeout);
                 }
             };
             ws.onmessage = function(event) {

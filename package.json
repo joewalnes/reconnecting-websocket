@@ -15,5 +15,6 @@
   "bugs": {
     "url": "https://github.com/joewalnes/reconnecting-websocket/issues"
   },
-  "homepage": "https://github.com/joewalnes/reconnecting-websocket"
+  "homepage": "https://github.com/joewalnes/reconnecting-websocket",
+  "types": "index.d.ts"
 }

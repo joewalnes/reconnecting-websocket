@@ -206,7 +206,7 @@
         };
 
         this.open = function (reconnectAttempt) {
-            if (reconnectAttempt && this.maxReconnectAttempts && this.reconnectAttempts > this.maxReconnectAttempts) {
+            if (reconnectAttempt && this.reconnectAttempts > this.maxReconnectAttempts) {
                 return;
             }
 

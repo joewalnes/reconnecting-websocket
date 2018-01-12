@@ -1,3 +1,7 @@
+# DEPRECATION NOTICE
+
+Development of this module has been discontinued. Please use [@pladaria's version](https://github.com/pladaria/reconnecting-websocket) instead.
+
 ReconnectingWebSocket
 =====================
 

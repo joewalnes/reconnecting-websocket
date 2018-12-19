@@ -208,6 +208,7 @@
         this.open = function (reconnectAttempt) {
             ws = new WebSocket(self.url, protocols || []);
             ws.binaryType = this.binaryType;
+            forcedClose = false;
 
             if (reconnectAttempt) {
                 if (this.maxReconnectAttempts && this.reconnectAttempts > this.maxReconnectAttempts) {

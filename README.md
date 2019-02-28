@@ -142,6 +142,10 @@ socket.timeoutInterval = 5400;
 - Transmits data to the server over the WebSocket connection.
 - Accepts @param data a text string, ArrayBuffer or Blob
 
+#### `ws.setProtocols(protocols)`
+- Set a new protocols value to be used on follow up reconnects. Useful when connection requires an access token that expires and renews.
+
+
 Like this? Check out [websocketd](https://github.com/joewalnes/websocketd) for the simplest way to create WebSocket backends from any programming language.
 
 [Follow @joewalnes](https://twitter.com/joewalnes)

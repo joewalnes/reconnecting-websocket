@@ -131,7 +131,10 @@
             maxReconnectAttempts: null,
 
             /** The binary type, possible values 'blob' or 'arraybuffer', default 'blob'. */
-            binaryType: 'blob'
+            binaryType: 'blob',
+
+            /** The sub-protocols to use when creating a websocket */
+            protocols: protocols || null
         }
         if (!options) { options = {}; }
 
@@ -205,8 +208,12 @@
         	return evt;
         };
 
+        this.setProtocols = function (protocols) {
+          settings.protocols = protocols;
+        };
+
         this.open = function (reconnectAttempt) {
-            ws = new WebSocket(self.url, protocols || []);
+            ws = new WebSocket(self.url, settings.protocols || []);
             ws.binaryType = this.binaryType;
 
             if (reconnectAttempt) {

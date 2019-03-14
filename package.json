@@ -17,7 +17,7 @@
     "url": "https://github.com/joewalnes/reconnecting-websocket/issues"
   },
   "homepage": "https://github.com/joewalnes/reconnecting-websocket",
-  "dependencies": {
+  "devDependencies": {
     "uglify-js": "^3.4.9"
   }
 }

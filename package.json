@@ -1,10 +1,13 @@
 {
   "name": "ReconnectingWebSocket",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A small JavaScript library that decorates the WebSocket API to provide a WebSocket connection that will automatically reconnect if the connection is dropped.",
   "main": "reconnecting-websocket.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "release": "npm run minifi -- -o reconnecting-websocket.min.js reconnecting-websocket.js",
+    "verify": "npm run minifi -- -o verify_reconnecting-websocket.min.js reconnecting-websocket.js && files-compare reconnecting-websocket.min.js verify_reconnecting-websocket.min.js",
+    "minifi": "uglifyjs --compress --mangle"
   },
   "repository": {
     "type": "git",
@@ -15,5 +18,9 @@
   "bugs": {
     "url": "https://github.com/joewalnes/reconnecting-websocket/issues"
   },
-  "homepage": "https://github.com/joewalnes/reconnecting-websocket"
+  "homepage": "https://github.com/joewalnes/reconnecting-websocket",
+  "devDependencies": {
+    "files-compare": "^1.0.2",
+    "uglify-js": "^3.4.9"
+  }
 }

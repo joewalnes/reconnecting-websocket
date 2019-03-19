@@ -5,7 +5,9 @@
   "main": "reconnecting-websocket.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "minifi": "uglifyjs --compress --mangle -o reconnecting-websocket.min.js -- reconnecting-websocket.js"
+    "release": "npm run minifi -- -o reconnecting-websocket.min.js reconnecting-websocket.js",
+    "verify": "npm run minifi -- -o verify_reconnecting-websocket.min.js reconnecting-websocket.js && files-compare reconnecting-websocket.min.js verify_reconnecting-websocket.min.js",
+    "minifi": "uglifyjs --compress --mangle"
   },
   "repository": {
     "type": "git",
@@ -18,6 +20,7 @@
   },
   "homepage": "https://github.com/joewalnes/reconnecting-websocket",
   "devDependencies": {
+    "files-compare": "^1.0.2",
     "uglify-js": "^3.4.9"
   }
 }

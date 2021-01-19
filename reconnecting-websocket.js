@@ -266,11 +266,11 @@
                         eventTarget.dispatchEvent(generateEvent('close'));
                     }
 
-                    var timeout = self.reconnectInterval * Math.pow(self.reconnectDecay, self.reconnectAttempts);
+                    var timeoutNumber = self.reconnectInterval * Math.pow(self.reconnectDecay, self.reconnectAttempts);
                     setTimeout(function() {
                         self.reconnectAttempts++;
                         self.open(true);
-                    }, timeout > self.maxReconnectInterval ? self.maxReconnectInterval : timeout);
+                    }, timeoutNumber > self.maxReconnectInterval ? self.maxReconnectInterval : timeoutNumber);
                 }
             };
             ws.onmessage = function(event) {

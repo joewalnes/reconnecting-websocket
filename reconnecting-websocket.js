@@ -200,10 +200,8 @@
          * @param args Object an optional object that the event will use
          */
         function generateEvent(s, args) {
-        	var evt = document.createEvent("CustomEvent");
-        	evt.initCustomEvent(s, false, false, args);
-        	return evt;
-        };
+            return new CustomEvent(s, { detail: args });
+        }
 
         this.open = function (reconnectAttempt) {
             ws = new WebSocket(self.url, protocols || []);
